@@ -1,0 +1,26 @@
+*{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  
+}
+
+div {
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+#head-wrapper {
+  background-image: url('/assets/imgs/home-top1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#head-msk{
+  background-color: black;
+  opacity: 1;
+  
+}
