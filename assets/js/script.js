@@ -1,1 +1,357 @@
-// 
+//input data form api
+const productEl = document.querySelector("#template");
+const cartItemsEl = document.querySelector(".cart-contents");
+const subtotalItemsEl = document.querySelector(".total-title");
+const subtotalPriceEl = document.querySelector(".total-price");
+const totalItemInCartEl = document.querySelector(".cart-count");
+
+const icCart = document.querySelector(".cart")
+
+const totalItemCountRightEl = document.querySelector(".sub-cart-count");
+
+
+
+//READ PRODUCTS
+function renderProducts (){
+  products.forEach((product) => {
+    productEl.innerHTML += `
+  <div id= "products" class= "col-md-6 p-3 col-lg-3 justify-content-center d-flex  ">
+    <div id="product-img" class="product card h-100">
+      <a href="#" class="img-prod  text-black"><img class="img-fluid" src="${product.img}" alt="prooducts"></a>
+      <div class="text py-3 pb-4 px-3 text-center" id="product-text">
+        <!-- product label -->
+        <h2>
+          <a >${product.name}</a>
+        </h2>
+        <div class="d-flex flex-column">
+        <p id="pricing" class="col" ><!--price-->$ ${product.price}</p>
+        <p id="disc"class="col"></p>
+      </div>
+
+        <!-- bottom icon-->
+        <div class="bottom-area d-flex px-3 ">
+          <div class="m-auto d-flex" id="product-icons">
+
+
+            <div id="add-cart" class="d-flex justify-content-center align-items-center mx-3 "
+            style="cursor:pointer"
+            onclick="addToCart(${product.id})"
+            >
+              <span>
+                <i class="fa-solid fa-cart-shopping"></i>
+              </span>
+            </div>
+
+            <div id="add-wish" class="d-flex justify-content-center align-items-center mx-3">
+              <span>
+                <i id="btn1" class="far fa-heart"></i>
+              </span>
+            </div>
+
+          </div>
+          <!--bottom icon end-->
+
+        </div>
+
+      </div>
+
+      <div id="pop-dsc" class="card position-absolute h-auto" style="max-width: 200px;">
+        <div class="card-body">
+          <p id="disc" class="card-text">${product.dsc},Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, doloribus.</p>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+`
+  })
+}
+renderProducts();
+
+//cart Array
+let cart = JSON.parse(localStorage.getItem("CART")) || [];
+updataCart();
+
+//check if carts empty
+function emptyCart() {
+  const inCart = document.querySelector(".cart-contents");
+  console.log(cart);
+  if(cart.length === 0){
+    
+    inCart.innerHTML = `
+    <div class="empty-txt"><p>You have no items in your basket</p></div>
+    `
+  }
+}
+
+// ADD TO CART
+function addToCart(id){
+  //check if product already excist in cart
+  if(cart.some((item) => item.id === id)){
+    // alert(" Product already in cart!")
+
+
+    // cartNumAnimation();
+    changeNumberOfUnits("plus",id);
+  }else{
+    const item = products.find((product) => product.id === id)
+  
+    cart.push({
+      ...item,
+      numberOfUnits : 1,
+    });
+  }
+
+  updataCart();
+}
+
+
+//updata Cart
+function updataCart(){
+  renderCartItems();
+  renderSubtotal();
+
+  //save cart to local strage
+  localStorage.setItem("CART",JSON.stringify(cart));
+}
+
+//calculate and render subtotal
+function renderSubtotal() {
+  let totalPrice = 0,
+    totalItems = 0;
+
+  cart.forEach((item) =>{
+    totalPrice += item.price * item.numberOfUnits;
+    totalItems += item.numberOfUnits;
+  });
+
+  subtotalItemsEl.innerHTML = `Total  ( ${totalItems} items):` ;
+  subtotalPriceEl.innerHTML = `$ ${totalPrice.toFixed(2)}`;
+  totalItemInCartEl.innerHTML = ` ${totalItems} `;
+
+  totalItemCountRightEl.innerHTML = ` ${totalItems} `;
+
+}
+
+
+//render Cart items
+function renderCartItems() {
+  //clear cart element
+  cartItemsEl.innerHTML = ""; 
+
+  cart.forEach((item) => {
+    cartItemsEl.innerHTML += `
+      <div class="cart-box">
+        <img src="${item.img}" alt="cart-img">
+        <div class="detail-box">
+          <div class="cart-product-title"><p>${item.name}</p></div>
+          <div class="cart-price"><p>$ ${item.price}</p></div>
+
+          <div id="units">
+            <div class="btn minus" onclick="changeNumberOfUnits('minus', ${item.id})">-</div>
+            <div class="number">${item.numberOfUnits}</div>
+            <div class="btn plus" onclick="changeNumberOfUnits('plus', ${item.id})">+</div>
+          </div>
+
+        </div> 
+          <div onclick="removeItemFromCart(${item.id})">
+          <i class="cart-remove fa-solid fa-trash"></i>
+          </div>
+      </div>
+    `
+  })
+}
+
+//remove item from cart
+function removeItemFromCart(id){
+  cart = cart.filter((item) => item.id !== id)
+
+  updataCart();
+  emptyCart();
+
+}
+
+//change numbers of units for an item
+function changeNumberOfUnits(action, id) {
+  cart = cart.map((item) => {
+
+    let numberOfUnits =item.numberOfUnits;
+
+    if(item.id === id){
+      if(action === "minus" && numberOfUnits > 1){
+        numberOfUnits--;
+      }else if(action === "plus" && numberOfUnits < item.rate){
+        numberOfUnits++;
+      }
+    }
+    return {
+      ...item,
+      numberOfUnits,
+    };
+  });
+
+  updataCart();
+}
+
+//heart button
+document.addEventListener('DOMContentLoaded',function(){
+  var btns = document.querySelectorAll('#btn1');
+  for( var i = 0;i < btns.length; i++ ){
+    btns[i].addEventListener('click',function(){
+      
+      if(this.classList.contains("far")){
+        this.classList.remove("far");
+        this.classList.add("fas"); 
+      }else{
+        this.classList.remove("fas");
+        this.classList.add("far");
+      }
+      
+    },false );
+  }
+},false);
+
+
+
+
+
+// show and hide the cart
+
+const addContents = document.getElementById('addContents');
+const cartInfo = document.getElementById('cart-button');
+const incart = document.getElementById('cart-inside');
+const close = document.getElementById('close');
+
+
+
+close.addEventListener('click', function() {
+  incart.style.right = "-100%";
+  incart.style.transition = "all ease-out 1.5s"
+  incart.classList.remove('show-cart');
+  addContents.style.right = "-100%";
+  hideDark()
+})
+
+// cartInfo.addEventListener('click', function(){
+//   incart.classList.toggle('show-cart');
+//   incart.style.transition = "all ease-out 0.5s";
+//   incart.style.right = "0";
+//   emptyCart()
+//   addContents.style.right = "0";
+//   openDark()
+// })
+
+
+function openCart() {
+  incart.classList.toggle('show-cart');
+  incart.style.transition = "all ease-out 0.5s";
+  incart.style.right = "0";
+  emptyCart();
+  addContents.style.right = "0";
+  openDark()
+  
+};
+function openCartSub() {
+  incart.classList.toggle('show-cart');
+  incart.style.transition = "all ease-out 0.5s";
+  incart.style.right = "0";
+  emptyCart();
+  addContents.style.right = "0";
+  openDark()
+  console.log("openDark");
+};
+
+function closeCart() {
+  incart.style.right = "-100%";
+  incart.style.transition = "all ease-out 1.5s"
+  incart.classList.remove('show-cart');
+  hideDark();
+};
+
+// cart end
+
+
+// show and hide the cart
+
+const darken = document.getElementById("darken");
+
+function openDark(){
+  darken.style.visibility = " visible ";
+  addContents.style.visibility = "visible";
+  addContents.style.display = "flex";
+  darken.style.display = "block";
+};
+
+function hideDark(){
+  darken.style.visibility = "hidden";
+  addContents.style.visibility = "hidden";
+
+};
+
+// show and hide the cart end
+
+//animetion of deleting items
+const bg = document.querySelector(".bg");
+let timeId;
+let timeId2;
+
+function loadBg(id) {
+  bg.style.display = "flex";
+  timeId = setTimeout(function (){
+    closeSpin(id)
+  } , 1100);
+}
+
+function closeSpin(id) {
+  bg.style.display = "none";
+  clearTimeout(timeId)
+  addToCart(id)
+}
+//End of animetion of deleting items
+
+//item number's animation after add the item to cart
+
+function cartNumAnimation(){
+  timeId2 = setTimeout(function(){
+    icCart.style.animation = "cartAnimation .5s";
+    // icCart.classList.replace('cart', 'cart-active');
+
+  }, 400);
+
+  timeId2 = setTimeout(function(){
+    icCart.style.animation = "none";
+    // icCart.classList.replace('cart-active', 'cart');
+
+  }, 900);
+
+}
+
+
+// delete Item message
+
+let showAlart = document.getElementById('delete-items');
+
+var yes = document.getElementById('yes');
+var no = document.getElementById('no');
+var cansel = document.getElementById('cansel');
+
+
+function deleteItem(id){
+  showAlart.style.display = 'flex';
+
+  yes.addEventListener('click', function(){
+    showAlart.style.display = 'none';
+    removeItemFromCart(id)
+  })
+
+  no.addEventListener('click', function(){
+    showAlart.style.display = 'none';
+  })
+
+  cansel.addEventListener('click', function(){
+    showAlart.style.display = 'none';
+  })
+
+}
+

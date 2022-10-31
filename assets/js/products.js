@@ -118,7 +118,7 @@ const products = [
   },
   {
     "id": 13,
-    "img": "https://goldbelly.imgix.net/uploads/showcase_media_asset/image/132862/decoys-whole-peking-duck-for-4.36f80dd5235f5495f279ed8765c33167.jpg?ixlib=react-9.0.2&auto=format&ar=1%3A1",
+    "img": "https://goldbelly.imgix.net/uploads/showcase_media_asset/image/117831/whole-plate-short-rib-dinner-for-3-4.3d4f7a1d5441c0a3a50263c89ef3fb47.jpg?ixlib=react-9.0.2&auto=format&ar=1%3A1",
     "name": "RedFarm",
     "dsc": "Whole Peking Duck Kit for 4",
     "price": 139,
@@ -199,7 +199,7 @@ const products = [
   },
   {
     "id": 22,
-    "img": "https://goldbelly.imgix.net/uploads/showcase_media_asset/image/111490/pasta-sauce-gift-basket.e7d2b1afaeef767b7327843716d15203.jpg?ixlib=react-9.0.2&auto=format&ar=1%3A1",
+    "img": "https://goldbelly.imgix.net/uploads/showcase_media_asset/image/102811/legendary-turtle-soup.12d6f4c9806c3cf11cd2ff2a160657e7.jpg?ixlib=react-9.0.2&auto=format&ar=1%3A1",
     "name": "Fox & the Knife",
     "dsc": "Pasta Dinner Gift Basket",
     "price": 129,
