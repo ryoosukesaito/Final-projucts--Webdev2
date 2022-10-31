@@ -49,7 +49,7 @@ gsap.from("#right-menu",{
     end: "end 30%",
     scrub:3,
     autoAlpha:1,
-    markers:"ture",
+    // markers:"ture",
   },
   y:"-500px",
   autoAlpha:0,
