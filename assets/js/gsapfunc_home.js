@@ -69,7 +69,7 @@ const tlText = gsap.timeline({
   scrollTrigger: {
     trigger:"#main",
     start: "center 55%",
-    markers:true,
+    // markers:true,
   },
 
 });
